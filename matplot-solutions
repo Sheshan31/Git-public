@@ -1,0 +1,87 @@
+import matplotlib.pyplot as plt 
+
+import os.path
+
+from skimage.io import imread
+
+from skimage import data_dir
+
+img = imread(os.path.join(data_dir, 'phantom.png'))
+
+non_zero=img>50 #index which are to be set as 255
+
+#1.
+
+img[non_zero]=255
+
+img[~non_zero]=0
+
+plt.imshow(img_c)
+
+plt.show()
+
+
+
+#2.
+
+img_slice=img.copy()
+
+img_slice=img_slice[100:300,100:200]
+
+img_slice2=img.copy()
+
+img_slice2=img_slice2[100:300,200:300]
+
+img_new=img.copy()
+
+img_new[100:300,100:200]=img_slice2
+
+img_new[100:300,200:300]=img_slice
+
+plt.imshow(img_new)
+
+plt.show()
+
+img_flipped=img.copy()
+
+img_slice=np.fliplr(img_slice)
+
+img_slice2=np.fliplr(img_slice2)
+
+img_new[100:300,100:200]=img_slice2
+
+img_new[100:300,200:300]=img_slice
+
+plt.imshow(img_new)
+
+
+
+#3.
+
+img_left=img_new[100:300,100:200]
+
+img_right=img_new[100:300,200:300]
+
+
+
+img_left=img_left.compress([not(i%2) for i in range(len(img_left))],axis = 0)
+
+img_left=img_left.compress([not(i%2) for i in range(len(img_left[0]))],axis = 1)
+
+
+
+img_right=img_right.compress([not(i%2) for i in range(len(img_right))],axis = 0)
+
+img_right=img_right.compress([not(i%2) for i in range(len(img_right[0]))],axis = 1)
+
+
+
+img_new[100:300,100:200]=255
+
+img_new[100:300,200:300]=255
+
+img_new[150:250,125:175]=img_left
+
+img_new[150:250,225:275]=img_right
+
+plt.imshow(img_new)
